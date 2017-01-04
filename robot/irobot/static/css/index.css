@@ -1,0 +1,22 @@
+
+body {
+    background-color: #eeeeee;
+}
+
+#codewindow {
+    height: 70vh;
+}
+
+.mybtn {
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.CodeMirror {
+  border: 1px solid #eee;
+  height: 70vh;
+}
+
+.error {
+	color: red;
+}
