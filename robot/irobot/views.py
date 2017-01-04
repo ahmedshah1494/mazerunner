@@ -40,9 +40,9 @@ def runcode(code):
             newcode = Code(code=code)
             newcode.save()
     except Exception as e: print (str(e))
-    with open("/home/pi/prompt/main.py", "w") as f:
+    with open("main.py", "w") as f:
         f.write(code+"\n")
-    result = subprocess.check_output("/home/pi/prompt/run", shell=True)
+    result = subprocess.check_output("~/run", shell=True)
     return result
 
 @csrf_exempt
@@ -57,8 +57,8 @@ def run_code(r):
         settings.GLOBAL_LOCK.release()
     try:
         result = runcode(code)
-    except Exception as err:
-        result = "<span class='error'> Interrupted"+str(err)+"</span>"
+    except:
+        result = "<span class='error'> Interrupted</span>"
     settings.GLOBAL_LOCK.acquire()
     settings.PROGRAM_STATE = None
     settings.GLOBAL_LOCK.release()

@@ -1,4 +1,6 @@
-goForward(1.0)
+goForward(5.0)
+turnLeft(180)
+goForward(5.0)
 
 
 
