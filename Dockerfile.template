@@ -11,7 +11,6 @@ WORKDIR /usr/src/app
 # This will copy all files in our root to the working  directory in the container
 COPY . ./
 
-COPY bashrc $HOME/.bashrc
 
 # Copy requirements.txt first for better cache on later pushes
 COPY ./requirements.txt /requirements.txt
@@ -21,6 +20,8 @@ RUN pip install -r /requirements.txt
 
 # switch on systemd init system in container
 ENV INITSYSTEM on
+
+COPY bashrc root/.bashrc
 
 # run Django webserver
 CMD ["python", "./robot/manage.py", "runserver", "$THEIP:5678"]
