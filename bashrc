@@ -104,5 +104,4 @@ fi
 
 PS1="> "
 cat stopper.py | python runner.py
-THEIP=$(ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')
-./prompt/robot/manage.py runserver $THEIP:5678 &
+THEIP=$(ifconfig  wlan0 | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')
