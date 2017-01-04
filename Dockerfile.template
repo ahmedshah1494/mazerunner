@@ -22,4 +22,4 @@ ENV INITSYSTEM on
 
 CMD cat stopper.py | python runner.py
 CMD THEIP=$(ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')
-CMD ./prompt/robot/manage.py runserver $THEIP:5678 &
+CMD ./robot/manage.py runserver $THEIP:5678 &
