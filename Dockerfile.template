@@ -24,4 +24,4 @@ ENV INITSYSTEM on
 COPY bashrc root/.bashrc
 
 # run Django webserver
-CMD ["python", "./robot/manage.py", "runserver", "$THEIP:5678"]
+CMD python ./robot/manage.py runserver $THEIP:5678 &
