@@ -6,7 +6,8 @@ FROM resin/raspberrypi2-python
 MAINTAINER mabdella@qatar.cmu.edu
 
 # Defines our working directory in container
-WORKDIR /usr/src/app
+#WORKDIR /usr/src/app
+#WORKDIR /root
 
 # This will copy all files in our root to the working  directory in the container
 COPY . ./
@@ -21,7 +22,7 @@ RUN pip install -r /requirements.txt
 # switch on systemd init system in container
 ENV INITSYSTEM on
 
-COPY bashrc .bashrc
+RUN cat stopper.py | python runner.py
 
 # run Django webserver
 CMD python ./robot/manage.py runserver $THEIP:5678 &
