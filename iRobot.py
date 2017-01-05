@@ -36,6 +36,10 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###########################################################################
 
+
+from Tkinter import *
+import tkMessageBox
+import tkSimpleDialog
 import time
 
 import struct
@@ -756,7 +760,37 @@ class iRobotInterface(Tk):
         global connection
         return connection != None
 
-    
+    def onConnect(self):
+        global connection
+
+        if connection is not None:
+            tkMessageBox.showinfo('Oops', "You're already connected!")
+            return
+
+        try:
+            ports = self.getSerialPorts()
+            port = tkSimpleDialog.askstring('Port?', 'Enter COM port to open.\nAvailable options:\n' + '\n'.join(ports))
+            #port = raw_input('Port?', 'Enter COM port to open.\nAvailable options:\n' + '\n'.join(ports))
+        except EnvironmentError:
+            port = tkSimpleDialog.askstring('Port?', 'Enter COM port to open.')
+
+        if port is not None:
+            print "Trying " + str(port) + "... "
+            try:
+                connection = serial.Serial(port, baudrate=115200, timeout=1)
+                print "Connected!"
+                tkMessageBox.showinfo('Connected', "Connection succeeded!")
+            except:
+                print "Failed."
+                tkMessageBox.showinfo('Failed', "Sorry, couldn't connect to " + str(port))
+
+
+    def onHelp(self):
+        tkMessageBox.showinfo('Help', helpText)
+
+    def onQuit(self):
+        if tkMessageBox.askyesno('Really?', 'Are you sure you want to quit?'):
+            self.destroy()
 
     def stop(self):
          self.sendCommandASCII('173')

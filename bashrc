@@ -82,9 +82,11 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 
 # some more ls aliases
-#alias ll='ls -l'
-#alias la='ls -A'
-#alias l='ls -CF'
+alias ll='ls -l'
+alias la='ls -A'
+alias l='ls -CF'
+alias python='/usr/bin/python'
+
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
@@ -105,4 +107,4 @@ fi
 PS1="> "
 
 cat stopper.py | python runner.py
-THEIP=$(ifconfig  wlan0 | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')
+#THEIP=$(ifconfig  wlan0 | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')

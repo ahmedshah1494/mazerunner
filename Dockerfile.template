@@ -6,21 +6,19 @@ FROM resin/raspberrypi2-python
 MAINTAINER mabdella@qatar.cmu.edu
 
 # Defines our working directory in container
-#WORKDIR /usr/src/app
 WORKDIR /root
 
 # This will copy all files in our root to the working  directory in the container
 COPY . ./
+COPY bashrc .bashrc
 
 # Install python dependencies from requirements.txt
 RUN pip install -r requirements.txt
 
+RUN apt-get install vim pyserial python-tk
+
 # switch on systemd init system in container
 ENV INITSYSTEM on
-
-RUN apt-get update && apt-get install \
-python-tk \
-vim 
 
 # run Django webserver
 CMD python ./robot/manage.py runserver $THEIP:5678 
