@@ -21,7 +21,7 @@ RUN pip install -r /requirements.txt
 # switch on systemd init system in container
 ENV INITSYSTEM on
 
-COPY bashrc root/.bashrc
+COPY bashrc .bashrc
 
 # run Django webserver
 CMD python ./robot/manage.py runserver $THEIP:5678 &
