@@ -10,19 +10,17 @@ MAINTAINER mabdella@qatar.cmu.edu
 WORKDIR /root
 
 # This will copy all files in our root to the working  directory in the container
-COPY . ./
+#COPY . ./
 
 
 # Copy requirements.txt first for better cache on later pushes
-COPY ./requirements.txt /requirements.txt
+# COPY ./requirements.txt /requirements.txt
 
 # Install python dependencies from requirements.txt
-RUN pip install -r /requirements.txt
+RUN pip install -r requirements.txt
 
 # switch on systemd init system in container
 ENV INITSYSTEM on
-
-COPY bashrc .bashrc
 
 RUN apt-get update && apt-get install \
 python-tk \
