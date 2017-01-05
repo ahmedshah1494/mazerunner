@@ -892,5 +892,3 @@ class iRobotInterface(Tk):
 
         return interpretedData
 
-
-
