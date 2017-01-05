@@ -24,7 +24,9 @@ ENV INITSYSTEM on
 
 COPY bashrc .bashrc
 
-RUN apt-get install python-tk
+RUN apt-get update && apt-get install \
+python-tk \
+vim 
 
 # run Django webserver
 CMD python ./robot/manage.py runserver $THEIP:5678 
