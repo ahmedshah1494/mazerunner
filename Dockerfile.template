@@ -15,7 +15,7 @@ COPY bashrc .bashrc
 # Install python dependencies from requirements.txt
 RUN pip install -r requirements.txt
 
-RUN apt-get install vim pyserial python-tk
+RUN apt-get install vim python-tk
 
 # switch on systemd init system in container
 ENV INITSYSTEM on
