@@ -12,10 +12,11 @@ WORKDIR /root
 COPY . ./
 COPY bashrc .bashrc
 
+RUN apt-get update && apt-get install -y vim 
+
 # Install python dependencies from requirements.txt
 RUN pip install -r requirements.txt
 
-RUN apt-get install vim 
 
 # switch on systemd init system in container
 ENV INITSYSTEM on
