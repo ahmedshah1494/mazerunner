@@ -7,7 +7,8 @@ try:
 		print "<span class='error'>Failed to connect to the iRobot</span>"
 	else:
 		try:
-REPLACETHISTEXTWITHCODE
+			robot.setForwardSpeed(200)
+			#robot.robot.stop()
 		except Exception as e:
 			if False:
 				print ("<span class='error'>You have an error: " + str(e) + "</span>")

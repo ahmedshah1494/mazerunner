@@ -1,1 +1,1 @@
-stopMoving()
+robot.robot.stop()
