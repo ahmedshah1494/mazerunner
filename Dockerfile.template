@@ -12,7 +12,7 @@ WORKDIR /root
 COPY . ./
 COPY bashrc .bashrc
 
-RUN apt-get update && apt-get install -y vim 
+#RUN apt-get update && apt-get install -y vim 
 
 # Install python dependencies from requirements.txt
 RUN pip install -r requirements.txt
@@ -23,4 +23,4 @@ ENV INITSYSTEM on
 # run Django webserver
 #CMD python ./robot/manage.py runserver $THEIP:5678 
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
-CMD pwd
+CMD ls -la
