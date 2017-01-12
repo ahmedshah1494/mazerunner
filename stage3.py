@@ -1,4 +1,5 @@
 from breezycreate2 import Robot
+
 import time
 
 bot = Robot()
@@ -8,7 +9,7 @@ bot.playNote('A1', 100)
 def solve():
     lastBump = 0
     while True:
-        bot.setForwardSpeed(speed)
+        bot.setForwardSpeed(200)
         bumpers = bot.getBumpers()
         if bumpers[0] and bumpers[1]:
             bot.setForwardSpeed(-200)
