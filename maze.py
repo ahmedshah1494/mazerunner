@@ -2,7 +2,6 @@ from breezycreate2 import Robot
 import time
 
 bot = Robot()
-
 bot.playNote('A1', 100)
 
 print "Going Forward"

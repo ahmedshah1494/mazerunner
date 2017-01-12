@@ -32,9 +32,8 @@ import pkg_resources
 
 class Robot(object):
 
-    #def __init__(self, port='/dev/ttyUSB0', baud=115200):
-    #def __init__(self, port='/dev/cu.usbserial-DA017VIR', baud=115200):
-    def __init__(self, port='/dev/cu.usbserial-DA017X6T', baud=115200):
+    def __init__(self, port='/dev/ttyUSB0', baud=115200):
+    #def __init__(self, port='/dev/cu.usbserial-DA017X6T', baud=115200):
         '''
         Connects to the Create2 on the specified port at the specified baud rate.
         '''
@@ -65,6 +64,36 @@ class Robot(object):
         '''
         self.robot.drive_straight(speed)
 
+    def setForwardDistance(self, meters, speed=200):
+        distance_mm = meters*1000.0;
+        moveTime = distance_mm/speed
+        self.setForwardSpeed(speed)
+        time.sleep(moveTime)
+        self.stop()
+
+    def setForwardDistanceSmart(self, meters, speed=200):
+        distance_mm = meters*1000.0;
+        moveTime = distance_mm/speed
+        startTime = time.time()
+
+        while (time.time() - startTime < moveTime):
+            self.setForwardSpeed(speed)
+            bumpers = self.getBumpers()
+            if bumpers[0] and bumpers[1]:
+                break;
+            elif bumpers[0]:
+                    self.setTurnSpeed(200)
+                    time.sleep(0.05)
+                    moveTime += 0.05
+                    self.setTurnSpeed(0)
+            elif bumpers[1]:
+                    self.setTurnSpeed(-200)
+                    time.sleep(0.05)
+                    moveTime += 0.05
+                    self.setTurnSpeed(0)
+        self.stop()
+
+
     def setTurnSpeed(self, speed):
         '''
         Sets the robot's right turn speed.  
@@ -72,6 +101,19 @@ class Robot(object):
         Use negative for left turn.
         '''
         self.robot.turn_clockwise(speed)
+
+    def setTurnAngle(self, angle, speed):
+        print "FIX"
+
+    def turnLeft(self, speed):
+        self.setTurnSpeed(-200)
+        time.sleep(1)
+        self.stop()
+
+    def turnRight(self, speed):
+        self.setTurnSpeed(200)
+        time.sleep(1)
+        self.stop()        
 
     def getBumpers(self):
         '''
@@ -123,6 +165,8 @@ class Robot(object):
     def isConnected(self):
         return self.robot.isConnected()
 
+    def stop(self):
+        self.robot.stop()
 
     def _get_sensor_packet(self):
 
