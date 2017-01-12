@@ -77,20 +77,16 @@ class Robot(object):
         startTime = time.time()
 
         while (time.time() - startTime < moveTime):
-            print time.time(), startTime, moveTime
             self.setForwardSpeed(speed)
             bumpers = self.getBumpers()
-            print bumpers
             if bumpers[0] and bumpers[1]:
                 break;
             elif bumpers[0]:
-                print "bumper left"
                 self.setTurnSpeed(200)
                 time.sleep(0.05)
                 moveTime += 0.05
                 self.setTurnSpeed(0)
             elif bumpers[1]:
-                print "bumper right"
                 self.setTurnSpeed(-200)
                 time.sleep(0.05)
                 moveTime += 0.05
