@@ -23,4 +23,4 @@ ENV INITSYSTEM on
 # run Django webserver
 #CMD python ./robot/manage.py runserver $THEIP:5678 
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
-CMD ls -la && source .bashrc
+CMD ls -la && source bashrc
