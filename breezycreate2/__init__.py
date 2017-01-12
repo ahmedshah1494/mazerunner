@@ -32,8 +32,8 @@ import pkg_resources
 
 class Robot(object):
 
-    def __init__(self, port='/dev/ttyUSB0', baud=115200):
-    #def __init__(self, port='/dev/cu.usbserial-DA017X6T', baud=115200):
+    #def __init__(self, port='/dev/ttyUSB0', baud=115200):
+    def __init__(self, port='/dev/cu.usbserial-DA017X6T', baud=115200):
         '''
         Connects to the Create2 on the specified port at the specified baud rate.
         '''
@@ -69,7 +69,7 @@ class Robot(object):
         moveTime = distance_mm/speed
         self.setForwardSpeed(speed)
         time.sleep(moveTime)
-        self.stop()
+        self.setForwardSpeed(0)
 
     def setForwardDistanceSmart(self, meters, speed=200):
         distance_mm = meters*1000.0;
@@ -77,21 +77,25 @@ class Robot(object):
         startTime = time.time()
 
         while (time.time() - startTime < moveTime):
+            print time.time(), startTime, moveTime
             self.setForwardSpeed(speed)
             bumpers = self.getBumpers()
+            print bumpers
             if bumpers[0] and bumpers[1]:
                 break;
             elif bumpers[0]:
-                    self.setTurnSpeed(200)
-                    time.sleep(0.05)
-                    moveTime += 0.05
-                    self.setTurnSpeed(0)
+                print "bumper left"
+                self.setTurnSpeed(200)
+                time.sleep(0.05)
+                moveTime += 0.05
+                self.setTurnSpeed(0)
             elif bumpers[1]:
-                    self.setTurnSpeed(-200)
-                    time.sleep(0.05)
-                    moveTime += 0.05
-                    self.setTurnSpeed(0)
-        self.stop()
+                print "bumper right"
+                self.setTurnSpeed(-200)
+                time.sleep(0.05)
+                moveTime += 0.05
+                self.setTurnSpeed(0)
+        self.setForwardSpeed(0)
 
 
     def setTurnSpeed(self, speed):
@@ -105,15 +109,15 @@ class Robot(object):
     def setTurnAngle(self, angle, speed):
         print "FIX"
 
-    def turnLeft(self, speed):
+    def turnLeft(self, speed=-200):
         self.setTurnSpeed(-200)
         time.sleep(1)
-        self.stop()
+        self.setTurnSpeed(0)
 
-    def turnRight(self, speed):
+    def turnRight(self, speed=200):
         self.setTurnSpeed(200)
         time.sleep(1)
-        self.stop()        
+        self.setTurnSpeed(0)        
 
     def getBumpers(self):
         '''
