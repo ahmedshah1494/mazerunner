@@ -6,7 +6,7 @@ try:
 		print "<span class='error'>Failed to connect to the iRobot</span>"
 	else:
 		try:
-			robot.robot.stop()
+			robot.kill()
 		except Exception as e:
 			if False:
 				print ("<span class='error'>You have an error: " + str(e) + "</span>")

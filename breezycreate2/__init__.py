@@ -84,8 +84,11 @@ class Robot(object):
         self.setForwardSpeed(0)
 
     def setForwardDistanceSmart(self, meters, speed=200):
+        if meters < 0:
+            speed = -speed
+            
         distance_mm = meters*1000.0;
-        moveTime = distance_mm/speed
+        moveTime = abs(distance_mm/speed)
         startTime = time.time()
 
         while (time.time() - startTime < moveTime):
@@ -193,7 +196,12 @@ class Robot(object):
     def isConnected(self):
         return self.robot.isConnected()
 
+    
     def stop(self):
+        self.setForwardSpeed(0)
+        self.setTurnSpeed(0)
+
+    def kill(self):
         self.robot.stop()
 
     def _get_sensor_packet(self):

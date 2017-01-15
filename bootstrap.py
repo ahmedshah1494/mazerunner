@@ -1,4 +1,3 @@
-import iRobot
 from breezycreate2 import Robot
 
 try:

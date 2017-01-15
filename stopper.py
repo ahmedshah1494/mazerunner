@@ -1,1 +1,1 @@
-robot.stop()
+robot.close()
