@@ -29,6 +29,7 @@ import struct
 import warnings
 import time
 import pkg_resources
+import math
 
 class Robot(object):
 
@@ -46,6 +47,7 @@ class Robot(object):
         '''
         Closes the connection to the robot.
         '''
+        self.robot.stop()
         self.robot.destroy()
 
     def playNote(self, note, duration):
@@ -55,6 +57,13 @@ class Robot(object):
         Google MIDI TABLE for more info.
         '''
         self.robot.play_note(note, duration)
+
+   
+    def moveForward(self, speed=200):
+        self.robot.drive_straight(speed)
+
+    def moveBackward(self, speed=200):
+        self.robot.drive_straight(-1 * speed)
 
     def setForwardSpeed(self, speed):
         '''
@@ -102,18 +111,34 @@ class Robot(object):
         '''
         self.robot.turn_clockwise(speed)
 
-    def setTurnAngle(self, angle, speed):
-        print "FIX"
-
-    def turnLeft(self, speed=-200):
-        self.setTurnSpeed(-200)
-        time.sleep(1)
-        self.setTurnSpeed(0)
-
-    def turnRight(self, speed=200):
-        self.setTurnSpeed(200)
-        time.sleep(1)
+    def setTurnAngle(self, angle, speed=200):
+        if angle < 0: 
+            speed = -speed
+        
+        diameter = 255 # in mm
+        arclen = math.pi * diameter
+        distance = arclen * angle / 360.0
+        turnTime = abs(distance/speed)
+        
+        self.setTurnSpeed(speed)
+        time.sleep(turnTime)
         self.setTurnSpeed(0)        
+
+    
+    def getAngle(self):
+        self._get_sensor_packet()
+
+        return self.robot.sensor_state['angle']  
+
+    def getEncoderCounts(self):
+        self._get_sensor_packet()
+
+        return self.robot.sensor_state['left encoder counts'], self.robot.sensor_state['right encoder counts']
+
+    def getDistance(self):
+        self._get_sensor_packet()
+
+        return self.robot.sensor_state['distance']       
 
     def getBumpers(self):
         '''

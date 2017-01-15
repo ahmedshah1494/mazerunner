@@ -70,7 +70,7 @@ def stop_robot(r):
     pid_code = subprocess.check_output("ps aux | grep 'runner.py'", shell=True)
     pid = [int(s) for s in pid_code.split() if s.isdigit()][0]
     subprocess.check_output("kill " + str(pid), shell=True)
-    result = subprocess.check_output("echo 'stopMoving()' | python prompt/runner.py", shell=True)
+    result = subprocess.check_output("echo 'robot.close()' | python prompt/runner.py", shell=True)
     return HttpResponse(result)
 
 def superuser(r):
