@@ -33,8 +33,8 @@ import math
 
 class Robot(object):
 
-    def __init__(self, port='/dev/ttyUSB0', baud=115200):
-    #def __init__(self, port='/dev/cu.usbserial-DA017X6T', baud=115200):
+    #def __init__(self, port='/dev/ttyUSB0', baud=115200):
+    def __init__(self, port='/dev/cu.usbserial-DA017X6T', baud=115200):
         '''
         Connects to the Create2 on the specified port at the specified baud rate.
         '''
@@ -74,8 +74,11 @@ class Robot(object):
         self.robot.drive_straight(speed)
 
     def setForwardDistance(self, meters, speed=200):
+        if meters < 0:
+            speed = -speed
         distance_mm = meters*1000.0;
-        moveTime = distance_mm/speed
+        moveTime = abs(distance_mm/speed)
+
         self.setForwardSpeed(speed)
         time.sleep(moveTime)
         self.setForwardSpeed(0)
