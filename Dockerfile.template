@@ -24,4 +24,4 @@ ENV INITSYSTEM on
 #CMD python ./robot/manage.py runserver $THEIP:5678 
 
 RUN /bin/bash -c "source .bashrc"
-CMD echo "hello"
+CMD ./startServer
