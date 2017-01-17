@@ -42,9 +42,13 @@ class Robot(object):
         if self.isConnected():
             self.robot.start()
             self.robot.safe()
-            self.lastBump = 0
-            self.secondToLastBump = 0  
-            self.lastBumpCheckTime = 0
+            self.lastFrontBump = 0
+            self.lastLeftBump = 0
+            self.lastRightBump = 0
+            self.secondToLastFrontBump = 0  
+            self.secondToLastLeftBump = 0  
+            self.secondToLastRightBump = 0  
+            self.lastBumpCheck = 0
             self.rightBump = False
             self.leftBump = False
 
@@ -102,11 +106,11 @@ class Robot(object):
             if bumpers[0] and bumpers[1]:
                 break;
             elif bumpers[0]:
-                robot.rotate(10)
-                moveTime = moveTime + 0.12
+                self.rotate(10)
+                moveTime = moveTime + 0.112
             elif bumpers[1]:
-                robot.rotate(-10)
-                moveTime = moveTime + 0.12
+                self.rotate(-10)
+                moveTime = moveTime + 0.112
         self.setForwardSpeed(0)
 
 
@@ -137,15 +141,24 @@ class Robot(object):
         Returns left,right bumper states as booleans.
         '''
         self._get_sensor_packet()
-        self.lastBumpCheckTime = time.time()
+        self.lastBumpCheck = time.time()
 
         sensors = self.robot.sensor_state['wheel drop and bumps']
         leftBump = sensors['bump left']
         rightBump = sensors['bump right']
 
-        if leftBump or rightBump:
-            self.secondToLastBump = self.lastBump
-            self.lastBump = self.lastBumpCheckTime
+        if leftBump and rightBump:
+            self.secondToLastFrontBump = self.lastFrontBump
+            self.lastFrontBump = self.lastBumpCheck
+
+        if leftBump:
+            self.secondToLastLeftBump = self.lastLeftBump
+            self.lastLeftBump = self.lastBumpCheck
+
+        if rightBump:
+            self.secondToLastRightBump = self.lastRightBump
+            self.lastRightBump = self.lastBumpCheck
+
 
         return leftBump, rightBump
 
@@ -153,25 +166,49 @@ class Robot(object):
         self.leftBump = False
         self.rightBump = False
         self._get_sensor_packet()
-        self.lastBumpCheckTime = time.time()
+        self.lastBumpCheck = time.time()
         sensors = self.robot.sensor_state['wheel drop and bumps']
         leftBump = sensors['bump left']
         rightBump = sensors['bump right']
 
-        if leftBump or rightBump:
-            self.secondToLastBump = self.lastBump
-            self.lastBump = self.lastBumpCheckTime
+        if leftBump and rightBump:
+            self.secondToLastFrontBump = self.lastFrontBump
+            self.lastFrontBump = self.lastBumpCheck
 
-        if leftBump:  
+        if leftBump:
             self.leftBump = True
+            self.secondToLastLeftBump = self.lastLeftBump
+            self.lastLeftBump = self.lastBumpCheck
 
         if rightBump:
             self.rightBump = True
+            self.secondToLastRightBump = self.lastRightBump
+            self.lastRightBump = self.lastBumpCheck
+            
 
+    def bumpedFrontRecently(self, seconds):
+        bumpTimeToCheck = self.lastFrontBump
+        if self.lastBumpCheck == self.lastFrontBump:
+            bumpTimeToCheck = self.secondToLastFrontBump
 
-    def bumpedRecently(self, seconds):
+        if time.time() - bumpTimeToCheck < seconds:
+            return True
+        else:
+            return False
+
+    def bumpedLeftRecently(self, seconds):
+        bumpTimeToCheck = self.lastLeftBump
+        if self.lastBumpCheck == self.lastLeftBump:
+            bumpTimeToCheck = self.secondToLastLeftBump
+
+        if time.time() - bumpTimeToCheck < seconds:
+            return True
+        else:
+            return False
+
+    def bumpedRightRecently(self, seconds):
         bumpTimeToCheck = self.lastBump
-        if self.lastBumpCheckTime == self.lastBump:
+        if self.lastBumpCheck == self.lastBump:
             bumpTimeToCheck = self.secondToLastBump
 
         if time.time() - bumpTimeToCheck < seconds:

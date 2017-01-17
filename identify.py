@@ -1,8 +1,9 @@
 
-f = os.popen('ifconfig  wlan0 | grep "inet addr:"| grep -v "127.0.0.1" | awk "{ print $1}"')
+f f = os.popen('ifconfig  wlan0 | grep "inet addr:"| grep -v "127.0.0.1" | cut -d: -f2 | awk \'{ print $1}\'')
 myIP = f.read()
 
 
+robot.robot.full()
 for i in range(4):
 
 	ip = myIP
@@ -17,4 +18,7 @@ for i in range(4):
 		time.sleep(0.4)
 		ip = ip[1:]
 	time.sleep(1)
+	
+robot.robot.digit_led_ascii(str("    ").zfill(4))
+robot.robot.safe()
 	
