@@ -102,10 +102,10 @@ class Robot(object):
             if bumpers[0] and bumpers[1]:
                 break;
             elif bumpers[0]:
-                bot.rotate(10)
+                robot.rotate(10)
                 moveTime = moveTime + 0.12
             elif bumpers[1]:
-                bot.rotate(-10)
+                robot.rotate(-10)
                 moveTime = moveTime + 0.12
         self.setForwardSpeed(0)
 
@@ -890,7 +890,6 @@ class _sensorPacketDecoder(object):
                 A dict containing the updated sensor states of the Create 2
         """
         id = int(packet_id)  # Convert the packet id from a string to an int
-        print id
         
         # Depending on the packet id, we will need to do different decoding.
         # Packets 1-6 and 100, 101, 106, and 107 are special cases where they
