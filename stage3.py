@@ -13,7 +13,7 @@ def solve():
         bot.moveForward()
         leftBump, rightBump = bot.getBumpers()
         if leftBump and rightBump:
-          #  bot.moveDistance(-0.05)    
+            bot.moveDistance(-0.05)    
             if bot.bumpedRecently(3):
                 bot.rotate(180)
             else:

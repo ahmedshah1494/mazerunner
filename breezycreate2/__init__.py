@@ -102,15 +102,11 @@ class Robot(object):
             if bumpers[0] and bumpers[1]:
                 break;
             elif bumpers[0]:
-                self.setTurnSpeed(200)
-                time.sleep(0.05)
-                moveTime += 0.05
-                self.setTurnSpeed(0)
+                bot.rotate(10)
+                moveTime = moveTime + 0.12
             elif bumpers[1]:
-                self.setTurnSpeed(-200)
-                time.sleep(0.05)
-                moveTime += 0.05
-                self.setTurnSpeed(0)
+                bot.rotate(-10)
+                moveTime = moveTime + 0.12
         self.setForwardSpeed(0)
 
 
@@ -126,7 +122,7 @@ class Robot(object):
         if angle < 0: 
             speed = -speed
         
-        diameter = 255 # in mm
+        diameter = 245 # in mm
         arclen = math.pi * diameter
         distance = arclen * angle / 360.0
         turnTime = abs(distance/speed)
