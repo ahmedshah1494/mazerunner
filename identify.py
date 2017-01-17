@@ -2,12 +2,12 @@ import os
 from breezycreate2 import Robot
 import time
 
-f = os.popen('ifconfig  wlan0 | grep "inet addr:"| grep -v "127.0.0.1" | cut -d: -f2')
-myIP = f.read()
+f = os.popen('ifconfig  wlan0 | grep "inet addr:"| grep -v "127.0.0.1" | awk "{ print $1}"')
+	myIP = f.read()
 
 bot = Robot()
 
-while True:
+for i in range(4):
 
 	ip = myIP
 	for i in range(2):
