@@ -7,7 +7,6 @@ try:
 	else:
 		try:
 			robot.close()
-
 		except Exception as e:
 			if False:
 				print ("<span class='error'>You have an error: " + str(e) + "</span>")
