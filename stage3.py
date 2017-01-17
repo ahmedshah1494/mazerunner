@@ -24,6 +24,8 @@ def solve():
         elif rightBump:
                 robot.rotate(-1)
 
+
+
 def solve2():
     while True:
         robot.moveForward()
@@ -36,8 +38,8 @@ def solve2():
                 robot.rotate(-90)
               
         elif robot.leftBump:
-                robot.rotate(10)
+                robot.rotate(1)
         elif robot.rightBump:
-                robot.rotate(-10)
+                robot.rotate(-1)
 
 solve2()
