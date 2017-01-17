@@ -5,24 +5,39 @@ import time
 bot = Robot()
 bot.playNote('A1', 100)
 
+# while rain and car is on...
+
 
 def solve():
-    lastBump = 0
     while True:
         bot.moveForward()
-        bumpers = bot.getBumpers()
-        if bumpers[0] and bumpers[1]:
-            bot.setForwardDistance(-0.05)
-            bumpTime = time.time()
-            if time.time() - lastBump > 3:
-                bot.setTurnAngle(-90)
+        leftBump, rightBump = bot.getBumpers()
+        if leftBump and rightBump:
+          #  bot.moveDistance(-0.05)    
+            if bot.bumpedRecently(3):
+                bot.rotate(180)
             else:
-                bot.setTurnAngle(180)
-            lastBump = bumpTime
-            
-        elif bumpers[0]:
-                bot.setTurnAngle(10)
-        elif bumpers[1]:
-                bot.setTurnAngle(-10)
+                bot.rotate(-90)
+              
+        elif leftBump:
+                bot.rotate(10)
+        elif rightBump:
+                bot.rotate(-10)
 
-solve()
+def solve2():
+    while True:
+        bot.moveForward()
+        bot.updateBumpers()
+        if bot.leftBump and bot.rightBump:
+          #  bot.moveDistance(-0.05)    
+            if bot.bumpedRecently(3):
+                bot.rotate(180)
+            else:
+                bot.rotate(-90)
+              
+        elif bot.leftBump:
+                bot.rotate(10)
+        elif bot.rightBump:
+                bot.rotate(-10)
+
+solve2()

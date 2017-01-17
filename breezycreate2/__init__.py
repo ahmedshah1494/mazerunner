@@ -42,6 +42,11 @@ class Robot(object):
         if self.isConnected():
             self.robot.start()
             self.robot.safe()
+            self.lastBump = 0
+            self.secondToLastBump = 0  
+            self.lastBumpCheckTime = 0
+            self.rightBump = False
+            self.leftBump = False
 
     def close(self):
         '''
@@ -73,7 +78,7 @@ class Robot(object):
         '''
         self.robot.drive_straight(speed)
 
-    def setForwardDistance(self, meters, speed=200):
+    def moveDistance(self, meters, speed=200):
         if meters < 0:
             speed = -speed
         distance_mm = meters*1000.0;
@@ -83,7 +88,7 @@ class Robot(object):
         time.sleep(moveTime)
         self.setForwardSpeed(0)
 
-    def setForwardDistanceSmart(self, meters, speed=200):
+    def moveDistanceSmart(self, meters, speed=200):
         if meters < 0:
             speed = -speed
             
@@ -117,7 +122,7 @@ class Robot(object):
         '''
         self.robot.turn_clockwise(speed)
 
-    def setTurnAngle(self, angle, speed=200):
+    def rotate(self, angle, speed=200):
         if angle < 0: 
             speed = -speed
         
@@ -131,31 +136,54 @@ class Robot(object):
         self.setTurnSpeed(0)        
 
     
-    def getAngle(self):
-        self._get_sensor_packet()
-
-        return self.robot.sensor_state['angle']  
-
-    def getEncoderCounts(self):
-        self._get_sensor_packet()
-
-        return self.robot.sensor_state['left encoder counts'], self.robot.sensor_state['right encoder counts']
-
-    def getDistance(self):
-        self._get_sensor_packet()
-
-        return self.robot.sensor_state['distance']       
-
     def getBumpers(self):
         '''
         Returns left,right bumper states as booleans.
         '''
-
         self._get_sensor_packet()
+        self.lastBumpCheckTime = time.time()
 
         sensors = self.robot.sensor_state['wheel drop and bumps']
+        leftBump = sensors['bump left']
+        rightBump = sensors['bump right']
 
-        return sensors['bump left'], sensors['bump right']
+        if leftBump or rightBump:
+            self.secondToLastBump = self.lastBump
+            self.lastBump = self.lastBumpCheckTime
+
+        return leftBump, rightBump
+
+    def updateBumpers(self):
+        self.leftBump = False
+        self.rightBump = False
+        self._get_sensor_packet()
+        self.lastBumpCheckTime = time.time()
+        sensors = self.robot.sensor_state['wheel drop and bumps']
+        leftBump = sensors['bump left']
+        rightBump = sensors['bump right']
+
+        if leftBump or rightBump:
+            self.secondToLastBump = self.lastBump
+            self.lastBump = self.lastBumpCheckTime
+
+        if leftBump:  
+            self.leftBump = True
+
+        if rightBump:
+            self.rightBump = True
+
+
+    def bumpedRecently(self, seconds):
+        bumpTimeToCheck = self.lastBump
+        if self.lastBumpCheckTime == self.lastBump:
+            bumpTimeToCheck = self.secondToLastBump
+
+        if time.time() - bumpTimeToCheck < seconds:
+            return True
+        else:
+            return False
+
+
 
     def getCliffSensors(self):
         '''
@@ -866,6 +894,7 @@ class _sensorPacketDecoder(object):
                 A dict containing the updated sensor states of the Create 2
         """
         id = int(packet_id)  # Convert the packet id from a string to an int
+        print id
         
         # Depending on the packet id, we will need to do different decoding.
         # Packets 1-6 and 100, 101, 106, and 107 are special cases where they
@@ -1813,7 +1842,6 @@ class _sensorPacketDecoder(object):
         return self.decode_bool(data)  
 
     def safe_unpack(self, fmt, data):
-
         return struct.unpack(fmt, data.encode('utf8'))
 
     def decode_bool(self, byte):

@@ -8,10 +8,3 @@ if not bot.isConnected():
 bot.playNote('A1', 100)
 #bot.turnLeft()
 #bot.turnRight()
-
-
-
-bot.setTurnAngle(90)
-bot.setTurnAngle(-90)
-time.sleep(0.1)
-bot.close()
