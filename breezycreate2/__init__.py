@@ -208,8 +208,8 @@ class Robot(object):
 
     def bumpedRightRecently(self, seconds):
         bumpTimeToCheck = self.lastBump
-        if self.lastBumpCheck == self.lastBump:
-            bumpTimeToCheck = self.secondToLastBump
+        if self.lastBumpCheck == self.lastRightBump:
+            bumpTimeToCheck = self.secondToLastRightBump
 
         if time.time() - bumpTimeToCheck < seconds:
             return True
