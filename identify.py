@@ -18,6 +18,7 @@ for i in range(4):
 		ip = ip[1:]
 	time.sleep(1)
 
-robot.robot.digit_led_ascii(str("    ").zfill(4))
+pi_name = os.environ['RESIN_DEVICE_NAME_AT_INIT']
+robot.robot.digit_led_ascii(str(pi_name).zfill(4))
 robot.robot.safe()
 	
