@@ -30,6 +30,7 @@ import warnings
 import time
 import pkg_resources
 import math
+import os
 
 class Robot(object):
 
@@ -51,6 +52,9 @@ class Robot(object):
             self.lastBumpCheck = 0
             self.rightBump = False
             self.leftBump = False
+
+            pi_name = os.environ['RESIN_DEVICE_NAME_AT_INIT']
+            self.robot.digit_led_ascii(str(pi_name).zfill(4))
 
     def close(self):
         '''
@@ -106,10 +110,10 @@ class Robot(object):
             if bumpers[0] and bumpers[1]:
                 break;
             elif bumpers[0]:
-                self.rotate(10)
+                self.rotate(1)
                 moveTime = moveTime + 0.112
             elif bumpers[1]:
-                self.rotate(-10)
+                self.rotate(-1)
                 moveTime = moveTime + 0.112
         self.setForwardSpeed(0)
 
@@ -126,7 +130,7 @@ class Robot(object):
         if angle < 0: 
             speed = -speed
         
-        diameter = 245 # in mm
+        diameter = 250 # in mm
         arclen = math.pi * diameter
         distance = arclen * angle / 360.0
         turnTime = abs(distance/speed)
