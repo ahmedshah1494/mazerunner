@@ -35,7 +35,7 @@ import os
 class Robot(object):
 
     def __init__(self, port='/dev/ttyUSB0', baud=115200):
-    #def __init__(self, port='/dev/cu.usbserial-DA017XTL', baud=115200):
+    #def __init__(self, port='/dev/cu.usbserial-DA01NPPJ', baud=115200):
         '''
         Connects to the Create2 on the specified port at the specified baud rate.
         '''

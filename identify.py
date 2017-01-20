@@ -7,7 +7,7 @@ for i in range(20):
 
 	ip = myIP
 	for i in range(2):
-		robot.robot.digit_led_ascii(str(" ip ").zfill(4))
+		robot.robot.digit_led_ascii(str("Addr").zfill(4))
 		time.sleep(0.5)
 		robot.robot.digit_led_ascii(str("    ").zfill(4))
 		time.sleep(0.5)

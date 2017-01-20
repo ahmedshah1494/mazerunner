@@ -1,7 +1,8 @@
 from breezycreate2 import Robot
 
 robot = Robot()
-robot.rotate(-360)
+robot.rotate(10)
+robot.moveDistanceSmart(1)
 
 
 def solve1():

@@ -8,7 +8,6 @@ robot.playNote('A1', 100)
 # while rain and car is on...
 
 
-print robot.getWallSensor()
 def solve():
     while True:
         robot.moveForward()
@@ -43,4 +42,4 @@ def solve2():
         elif robot.rightBump:
                 robot.rotate(-1)
 
-solve2()
+solve()
