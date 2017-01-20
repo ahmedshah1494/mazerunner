@@ -121,16 +121,19 @@ class Robot(object):
         startTime = time.time()
 
         while (time.time() - startTime < moveTime):
-            self.setForwardSpeed(speed)
-            bumpers = self.getBumpers()
-            if bumpers[0] and bumpers[1]:
+            sensorStartTime = time.time()
+            leftBump, rightBump = robot.getBumpers()
+            sensorFetchTime = time.time() - sensorStartTime
+            if leftBump == rightBump == False:
+                robot.moveForward()
+            if leftBump and rightBump:
                 break;
-            elif bumpers[0]:
+            elif leftBump:
                 self.rotate(1)
-                moveTime = moveTime + 0.0111
-            elif bumpers[1]:
+                moveTime = moveTime + 0.0111 + sensorFetchTime
+            elif rightBump:
                 self.rotate(-1)
-                moveTime = moveTime + 0.0111
+                moveTime = moveTime + 0.0111 + sensorFetchTime
         self.setForwardSpeed(0)
 
 
