@@ -63,7 +63,9 @@ def run_code(r):
         pid_code = subprocess.check_output("ps aux | grep 'runner.py'", shell=True)
         pid = [int(s) for s in pid_code.split() if s.isdigit()][0]
         subprocess.check_output("kill " + str(pid), shell=True)
-       
+    except:
+        pass
+        
     finally:
         settings.GLOBAL_LOCK.release()
     
