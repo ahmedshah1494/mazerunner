@@ -35,7 +35,7 @@ import os
 class Robot(object):
 
     def __init__(self, port='/dev/ttyUSB0', baud=115200):
-    #def __init__(self, port='/dev/cu.usbserial-DA017X6T', baud=115200):
+    #def __init__(self, port='/dev/cu.usbserial-DA017XTL', baud=115200):
         '''
         Connects to the Create2 on the specified port at the specified baud rate.
         '''
@@ -53,8 +53,26 @@ class Robot(object):
             self.rightBump = False
             self.leftBump = False
 
+            self.diameter = 235
+
+
+            #pi_name = "0005"
             pi_name = os.environ['RESIN_DEVICE_NAME_AT_INIT']
             self.robot.digit_led_ascii(str(pi_name).zfill(4))
+
+            diameters = {
+                "0001" : 235,
+                "0002" : 235,
+                "0003" : 235,
+                "0004" : 235,
+                "0005" : 242,
+                "0006" : 245,
+                "0007" : 250,
+                "0008" : 238,
+                "0009" : 235
+            }
+        
+            self.diameter = diameters[pi_name]
 
     def close(self):
         '''
@@ -111,10 +129,10 @@ class Robot(object):
                 break;
             elif bumpers[0]:
                 self.rotate(1)
-                moveTime = moveTime + 0.112
+                moveTime = moveTime + 0.0111
             elif bumpers[1]:
                 self.rotate(-1)
-                moveTime = moveTime + 0.112
+                moveTime = moveTime + 0.0111
         self.setForwardSpeed(0)
 
 
@@ -130,8 +148,7 @@ class Robot(object):
         if angle < 0: 
             speed = -speed
         
-        diameter = 250 # in mm
-        arclen = math.pi * diameter
+        arclen = math.pi * self.diameter
         distance = arclen * angle / 360.0
         turnTime = abs(distance/speed)
         
@@ -144,7 +161,6 @@ class Robot(object):
         '''
         Returns left,right bumper states as booleans.
         '''
-        self._get_sensor_packet()
         self.lastBumpCheck = time.time()
 
         sensors = self.robot.sensor_state['wheel drop and bumps']

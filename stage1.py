@@ -1,5 +1,9 @@
 from breezycreate2 import Robot
 
+robot = Robot()
+robot.rotate(-360)
+
+
 def solve1():
 	robot.moveDistanceSmart(0.175 + 0.125)
 	robot.rotate(90)

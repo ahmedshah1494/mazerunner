@@ -10,7 +10,7 @@ from models import *
 
 # Create your views here.
 def index(r):
-    starter = "goForward(1.0)\n\n\n\n\n\n\n\n\n"
+    starter = "robot.moveDistanceSmart(1.0)\n\n\n\n\n\n\n\n\n"
     try:
         codes = Code.objects.all().order_by("-time")
         print codes, len(codes)
@@ -50,18 +50,27 @@ def run_code(r):
     settings.GLOBAL_LOCK.acquire()
     code = r.POST["code"]
     try:
-        if (settings.PROGRAM_STATE != None):
-            return HttpResponse("Code is running\n")
-        settings.PROGRAM_STATE = 1
+        pid_code = subprocess.check_output("ps aux | grep 'identify.py'", shell=True)
+        pid = [int(s) for s in pid_code.split() if s.isdigit()][0]
+        subprocess.check_output("kill " + str(pid), shell=True)
+        result = subprocess.check_output("echo 'robot.robot.safe()\nrobot.close()' | python runner.py", shell=True)
+        result = "<span class='error'> Good Luck :)</span>"
+        return HttpResponse(result)
+    except:
+        pass
+
+    try:
+        pid_code = subprocess.check_output("ps aux | grep 'runner.py'", shell=True)
+        pid = [int(s) for s in pid_code.split() if s.isdigit()][0]
+        subprocess.check_output("kill " + str(pid), shell=True)
+       
     finally:
         settings.GLOBAL_LOCK.release()
+    
     try:
         result = runcode(code)
     except:
         result = "<span class='error'> Interrupted</span>"
-    settings.GLOBAL_LOCK.acquire()
-    settings.PROGRAM_STATE = None
-    settings.GLOBAL_LOCK.release()
     print (result)
     return HttpResponse(result)
 
