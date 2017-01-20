@@ -52,10 +52,7 @@ class Robot(object):
             self.lastBumpCheck = 0
             self.rightBump = False
             self.leftBump = False
-
-            self.diameter = 235
-
-
+            
             #pi_name = "0005"
             pi_name = os.environ['RESIN_DEVICE_NAME_AT_INIT']
             self.robot.digit_led_ascii(str(pi_name).zfill(4))
@@ -71,7 +68,8 @@ class Robot(object):
                 "0008" : 238,
                 "0009" : 235
             }
-        
+
+            self.diameter = 235
             self.diameter = diameters[pi_name]
 
     def close(self):
@@ -161,6 +159,9 @@ class Robot(object):
         '''
         Returns left,right bumper states as booleans.
         '''
+        self.leftBump = False
+        self.rightBump = False
+        self._get_sensor_packet()
         self.lastBumpCheck = time.time()
 
         sensors = self.robot.sensor_state['wheel drop and bumps']
