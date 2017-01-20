@@ -122,10 +122,10 @@ class Robot(object):
 
         while (time.time() - startTime < moveTime):
             sensorStartTime = time.time()
-            leftBump, rightBump = robot.getBumpers()
+            leftBump, rightBump = self.getBumpers()
             sensorFetchTime = time.time() - sensorStartTime
             if leftBump == rightBump == False:
-                robot.moveForward()
+                self.moveForward()
             if leftBump and rightBump:
                 break;
             elif leftBump:
