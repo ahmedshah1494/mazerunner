@@ -220,27 +220,6 @@ class Robot(object):
         else:
             return False
 
-    def bumpedLeftRecently(self, seconds):
-        bumpTimeToCheck = self.lastLeftBump
-        if self.lastBumpCheck == self.lastLeftBump:
-            bumpTimeToCheck = self.secondToLastLeftBump
-
-        if time.time() - bumpTimeToCheck < seconds:
-            return True
-        else:
-            return False
-
-    def bumpedRightRecently(self, seconds):
-        bumpTimeToCheck = self.lastBump
-        if self.lastBumpCheck == self.lastRightBump:
-            bumpTimeToCheck = self.secondToLastRightBump
-
-        if time.time() - bumpTimeToCheck < seconds:
-            return True
-        else:
-            return False
-
-
 
     def getCliffSensors(self):
         '''
