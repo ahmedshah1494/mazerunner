@@ -35,7 +35,6 @@ import os
 class Robot(object):
 
     def __init__(self, port='/dev/ttyUSB0', baud=115200):
-    #def __init__(self, port='/dev/cu.usbserial-DA01NPPJ', baud=115200):
         '''
         Connects to the Create2 on the specified port at the specified baud rate.
         '''
@@ -43,17 +42,8 @@ class Robot(object):
         if self.isConnected():
             self.robot.start()
             self.robot.safe()
-            self.lastFrontBump = 0
-            self.lastLeftBump = 0
-            self.lastRightBump = 0
-            self.secondToLastFrontBump = 0  
-            self.secondToLastLeftBump = 0  
-            self.secondToLastRightBump = 0  
-            self.lastBumpCheck = 0
-            self.rightBump = False
-            self.leftBump = False
+           
             
-            #pi_name = "0005"
             pi_name = os.environ['RESIN_DEVICE_NAME_AT_INIT']
             self.robot.digit_led_ascii(str(pi_name).zfill(4))
 
@@ -162,63 +152,13 @@ class Robot(object):
         '''
         Returns left,right bumper states as booleans.
         '''
-        self.leftBump = False
-        self.rightBump = False
         self._get_sensor_packet()
-        self.lastBumpCheck = time.time()
-
+      
         sensors = self.robot.sensor_state['wheel drop and bumps']
         leftBump = sensors['bump left']
         rightBump = sensors['bump right']
-
-        if leftBump and rightBump:
-            self.secondToLastFrontBump = self.lastFrontBump
-            self.lastFrontBump = self.lastBumpCheck
-
-        if leftBump:
-            self.secondToLastLeftBump = self.lastLeftBump
-            self.lastLeftBump = self.lastBumpCheck
-
-        if rightBump:
-            self.secondToLastRightBump = self.lastRightBump
-            self.lastRightBump = self.lastBumpCheck
-
 
         return leftBump, rightBump
-
-    def updateBumpers(self):
-        self.leftBump = False
-        self.rightBump = False
-        self._get_sensor_packet()
-        self.lastBumpCheck = time.time()
-        sensors = self.robot.sensor_state['wheel drop and bumps']
-        leftBump = sensors['bump left']
-        rightBump = sensors['bump right']
-
-        if leftBump and rightBump:
-            self.secondToLastFrontBump = self.lastFrontBump
-            self.lastFrontBump = self.lastBumpCheck
-
-        if leftBump:
-            self.leftBump = True
-            self.secondToLastLeftBump = self.lastLeftBump
-            self.lastLeftBump = self.lastBumpCheck
-
-        if rightBump:
-            self.rightBump = True
-            self.secondToLastRightBump = self.lastRightBump
-            self.lastRightBump = self.lastBumpCheck
-            
-
-    def bumpedFrontRecently(self, seconds):
-        bumpTimeToCheck = self.lastFrontBump
-        if self.lastBumpCheck == self.lastFrontBump:
-            bumpTimeToCheck = self.secondToLastFrontBump
-
-        if time.time() - bumpTimeToCheck < seconds:
-            return True
-        else:
-            return False
 
 
     def getCliffSensors(self):
