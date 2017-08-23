@@ -1,9 +1,9 @@
 #Set the base os
 FROM resin/%%RESIN_MACHINE_NAME%%-python
-FROM resin/raspberrypi2-python
+FROM resin/raspberrypi3-python
 
 # File Author / Maintainer
-MAINTAINER mabdella@qatar.cmu.edu
+MAINTAINER mshah1@qatar.cmu.edu
 
 # Defines our working directory in container
 WORKDIR /root
