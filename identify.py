@@ -3,6 +3,7 @@ myIP = f.read().strip()
 
 
 robot.robot.full()
+print myIP
 for i in range(20):
 
 	ip = myIP
