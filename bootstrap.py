@@ -34,7 +34,7 @@ def stop():
 
 
 # try:
-print 1
+print 1, 'hello'
 robot = Robot()
 print 2
 if not robot.isConnected():
