@@ -21,5 +21,6 @@ for i in range(20):
 	time.sleep(1)
 
 pi_name = os.environ['RESIN_DEVICE_NAME_AT_INIT']
+print pi_name
 robot.robot.digit_led_ascii(str(pi_name).zfill(4))
 robot.robot.safe()
