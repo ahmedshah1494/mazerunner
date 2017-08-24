@@ -14,8 +14,8 @@ bootstrapper = bootstrapper.replace("REPLACETHISTEXTWITHCODE", usercode)
 with open("tmp.py", "w") as f:
 	f.write(bootstrapper)
 
-try:
-	import tmp
-except Exception as e:
-	print "<span class='error'>" + str(e) + "</span>"
+# try:
+import tmp
+# except Exception as e:
+# 	print "<span class='error'>" + str(e) + "</span>"
 	
