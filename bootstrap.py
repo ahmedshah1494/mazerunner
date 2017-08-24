@@ -1,6 +1,8 @@
 from breezycreate2 import Robot
 import time
 import os
+import photo
+import shapeDetector
 
 robot = None
 
@@ -31,7 +33,11 @@ def getWallSensors():
 def stop():
 	return robot.stop()
 
-
+def getTriangleColorFromImage():
+	img = photo.get_image(0)
+	c = shapeDetector.get_color(img)
+	robot.robot.digit_led_ascii(c[:4].zfill(4))
+	return c
 
 # try:
 robot = Robot()
