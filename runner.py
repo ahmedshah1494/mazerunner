@@ -2,7 +2,7 @@ import fileinput
 
 usercode = ""
 for line in fileinput.input():
-	usercode += "\t\t\t" + line
+	usercode += "\t\t" + line
 
 bootstrapper = ""
 with open("bootstrap.py", "r") as f:
