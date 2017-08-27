@@ -43,6 +43,7 @@ RUN apt-get -qy install \
 	python-numpy
 
 # download latest source & contrib
+mkdir ~/opencv
 RUN cd ~/opencv && \
 	wget -O opencv.zip https://github.com/opencv/opencv/archive/$OPENCV_VERSION.zip && \
 	unzip opencv.zip
