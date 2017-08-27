@@ -67,8 +67,7 @@ RUN cd ~/opencv/opencv-$OPENCV_VERSION && \
 	make -j4 && \
 	make && \
 	make install && \
-	ldconfig && \
-	make clean
+	ldconfig
 	
 # cleanup source
 # RUN cd ~/opencv && rm -rf opencv-$OPENCV_VERSION
