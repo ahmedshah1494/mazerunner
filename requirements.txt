@@ -1,3 +1,2 @@
 Django==1.9.4
 pyserial==3.2.1
-opencv-python
