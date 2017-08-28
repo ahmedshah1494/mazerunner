@@ -5,12 +5,6 @@ FROM resin/raspberrypi3-python:latest
 # File Author / Maintainer
 MAINTAINER mshah1@qatar.cmu.edu
 
-# Defines our working directory in container
-WORKDIR /root
-
-# This will copy all files in our root to the working  directory in the container
-COPY . ./
-
 #RUN apt-get update && apt-get install -y vim 
 RUN apt-get update && \
 	apt-get install -y cmake python-numpy python-scipy
@@ -30,6 +24,12 @@ RUN rm -rf /usr/local/src/opencv \
 
 ENV LD_LIBRARY_PATH /usr/local/lib
 
+
+# Defines our working directory in container
+WORKDIR /root
+
+# This will copy all files in our root to the working  directory in the container
+COPY . ./
 
 # Install python dependencies from requirements.txt
 RUN pip install -r requirements.txt
