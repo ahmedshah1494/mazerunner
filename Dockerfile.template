@@ -1,6 +1,6 @@
 #Set the base os
 FROM resin/%%RESIN_MACHINE_NAME%%-python
-FROM resin/raspberrypi2-python
+FROM resin/raspberrypi3-python:latest
 
 # File Author / Maintainer
 MAINTAINER mshah1@qatar.cmu.edu
@@ -12,68 +12,23 @@ WORKDIR /root
 COPY . ./
 
 #RUN apt-get update && apt-get install -y vim 
-ENV OPENCV_VERSION 3.2.0
-
-# install opencv3 as detailied in: http://www.pyimagesearch.com/2016/04/18/install-guide-raspberry-pi-3-raspbian-jessie-opencv-3/
-
-# update apt
-RUN apt-get update && apt-get install -y --no-install-recommends apt-utils
-
-# install necessary build tools
-RUN apt-get -qy install build-essential cmake pkg-config unzip wget
-
-# install necessary libraries
-RUN apt-get -qy install \
-	libjpeg-dev \
-	libtiff5-dev \
-	libjasper-dev \
-	libpng12-dev \
-	libavcodec-dev \
-	libavformat-dev \
-	libswscale-dev \
-	libv4l-dev \
-	libxvidcore-dev \
-	libx264-dev \
-	libgtk2.0-dev \
-	libatlas-base-dev \
-	gfortran \
-	python2.7-dev \
-	python3-dev \
-	python-pip \
-	python-numpy
-
-# download latest source & contrib
-RUN mkdir ~/opencv && \
-	cd ~/opencv && \
-	wget -O opencv.zip https://github.com/opencv/opencv/archive/$OPENCV_VERSION.zip && \
-	unzip opencv.zip
+RUN apt-get update && \
+	apt-get install -y cmake python-numpy python-scipy
 	
-RUN cd ~/opencv && \
-	wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/$OPENCV_VERSION.zip && \
-	unzip opencv_contrib.zip
+RUN git clone https://github.com/itseez/opencv.git /usr/local/src/opencv 
 
-# build opencv
-RUN cd ~/opencv/opencv-$OPENCV_VERSION && \
-	mkdir build && \
-	cd build && \
-	cmake -D CMAKE_BUILD_TYPE=RELEASE \
-	-D CMAKE_INSTALL_PREFIX=/usr/local \
-	-D INSTALL_C_EXAMPLES=ON \
-	-D BUILD_PYTHON_SUPPORT=ON \
-	-D BUILD_NEW_PYTHON_SUPPORT=ON \
-	-D INSTALL_PYTHON_EXAMPLES=ON \
-	-D OPENCV_EXTRA_MODULES_PATH=~/opencv/opencv_contrib-$OPENCV_VERSION/modules \
-	-D BUILD_EXAMPLES=ON .. && \
-	make -j4 && \
-	make && \
-	make install && \
-	ldconfig
-	
-# cleanup source
-# RUN cd ~/opencv && rm -rf opencv-$OPENCV_VERSION
+RUN cd /usr/local/src/opencv && \
+mkdir release && cd release && \
+cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local ..
 
+RUN cd /usr/local/src/opencv/release && \
+make && make install
 
-CMD ["/bin/bash"]
+RUN rm -rf /usr/local/src/opencv \
+	&& apt-get purge -y cmake \
+	&& apt-get autoremove -y --purge
+
+ENV LD_LIBRARY_PATH /usr/local/lib
 
 
 # Install python dependencies from requirements.txt
