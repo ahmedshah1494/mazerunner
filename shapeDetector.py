@@ -39,7 +39,7 @@ class ShapeDetector:
 def get_color(image):
 	# cv2.imshow('', image)
 	# cv2.waitKey(0)
-
+	cv2.imwrite('img.png',image)
 	colors = ['Blue','Green', 'Red']
 	# load the image and resize it to a smaller factor so that
 	# the shapes can be approximated better
@@ -53,11 +53,12 @@ def get_color(image):
 	# and threshold it
 	gray = cv2.cvtColor(resized, cv2.COLOR_BGR2GRAY)
 	inv = cv2.bitwise_not(gray)
-	blurred = cv2.GaussianBlur(inv, (5, 5), 0)
-	thresh = cv2.threshold(blurred, 200, 255, cv2.THRESH_BINARY)[1]
-	cv2.imshow('Thresh', thresh) 
+	blur = cv2.GaussianBlur(inv, (5, 5), 0)
+	_,thresh = cv2.threshold(blur,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+#	cv2.imshow('Thresh', thresh) 
 	# find contours in the thresholded image and initialize the
 	# shape detector
+	cv2.imwrite('img-thresh.png',thresh)
 	cnts = cv2.findContours(thresh.copy(), cv2.RETR_LIST,
 		cv2.CHAIN_APPROX_SIMPLE)
 	cnts = cnts[0] if imutils.is_cv2() else cnts[1]
@@ -83,7 +84,7 @@ def get_color(image):
 		# 	0.5, (255, 255, 255), 2)
 		# cv2.imshow("Image", resized)
 		# cv2.waitKey(0)
-
+#		print shape
 	 	if shape == 'triangle':
 	 		area = cv2.contourArea(c)
 			if area > max_area:
@@ -94,26 +95,26 @@ def get_color(image):
 				my_shape = c
 				max_area = area
 			# show the output image
-				cv2.imshow("Image", resized)
-				cv2.waitKey(0)
-				print shape,area
+#				cv2.imshow("Image", resized)
+#				cv2.waitKey(0)
+#				print shape,area
 	mask = np.zeros_like(resized)
-	print my_shape
+#	print my_shape
 	# cv2.drawContours(mask,[my_shape],-1,color=255,thickness=-1)
 	cv2.fillPoly(mask,pts=np.int32([my_shape]),color=(255,255,255))
-	cv2.imshow('', mask)
-	cv2.waitKey(0)
+#	cv2.imshow('', mask)
+#	cv2.waitKey(0)
 	points = np.where(mask == 255)
-	print points[2]
+#	print points[2]
 	pixels = []
 	for i in range(len(points[0])):
 		pixel = (resized[points[0][i], points[1][i]])
 		pixels.append(pixel)
 	pixels = np.array(pixels)
 	color = np.mean(pixels,axis=0)
-	print color
+#	print color
 	return colors[np.argmax(color)]
 
-# img = get_image(1)
-# # img = cv2.imread("green.jpg")
-# print get_color(img)
+#img = get_image(0)
+#img = cv2.imread("green.jpg")
+#print get_color(img)
