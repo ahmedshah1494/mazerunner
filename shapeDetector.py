@@ -40,7 +40,7 @@ def get_color(image):
 	# cv2.imshow('', image)
 	# cv2.waitKey(0)
 	cv2.imwrite('img.png',image)
-	colors = ['Blue','Green', 'Red']
+	colors = ['blue','green', 'red']
 	# load the image and resize it to a smaller factor so that
 	# the shapes can be approximated better
 	# image = cv2.imread("green.jpg")

@@ -1,6 +1,6 @@
 #Set the base os
 FROM resin/%%RESIN_MACHINE_NAME%%-python
-FROM resin/raspberrypi3-python:latest
+FROM resin/raspberrypi2-python:latest
 
 # File Author / Maintainer
 MAINTAINER mshah1@qatar.cmu.edu
@@ -10,6 +10,10 @@ WORKDIR /root
 
 # This will copy all files in our root to the working  directory in the container
 COPY . ./
+
+RUN modprobe bcm2835-v4l2
+# Install python dependencies from requirements.txt
+RUN pip install -r requirements.txt
 
 #RUN apt-get update && apt-get install -y vim 
 RUN apt-get update && \
@@ -29,10 +33,6 @@ RUN rm -rf /usr/local/src/opencv \
 	&& apt-get autoremove -y --purge
 
 ENV LD_LIBRARY_PATH /usr/local/lib
-
-
-# Install python dependencies from requirements.txt
-RUN pip install -r requirements.txt
 
 # switch on systemd init system in container
 ENV INITSYSTEM on
