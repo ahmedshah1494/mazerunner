@@ -39,5 +39,5 @@ ENV INITSYSTEM on
 
 # run Django webserver
 #CMD python ./robot/manage.py runserver $THEIP:5678 
-
+RUN pip install picamera
 CMD ./startServer
