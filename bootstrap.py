@@ -33,9 +33,9 @@ def getWallSensors():
 def stop():
 	return robot.stop()
 
-def getTriangleColorFromImage():
-	img = photo.get_image(0)
-	c = shapeDetector.get_color(img)
+def getDirectionFromImage():
+	img = photo.get_image_from_picam()
+	c = shapeDetector.get_direction(img)
 	robot.robot.digit_led_ascii(c[:4].zfill(4))
 	return c
 

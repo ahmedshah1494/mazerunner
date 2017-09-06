@@ -1,7 +1,7 @@
 import cv2
 import imutils
 import numpy as np
-from photo import get_image
+from photo import get_image_from_picam
 class ShapeDetector:
 	def __init__(self):
 		pass
@@ -34,9 +34,59 @@ class ShapeDetector:
 			shape = "circle"
  
 		# return the name of the shape
-		return shape
+		return shape,approx
+def get_perp_dist(v1,v2):
+	c = v2 - v1
+	return np.linalg.norm(c)**2 - (v1 / np.linalg.norm(v1)).dot(c)**2
 
-def get_color(image):
+def get_direction(img):
+	_,V = process_image(img)
+	if len(V) != 3:
+		return None
+	V = map(lambda x: x.flatten(), V)
+	print V
+	a = V[0] - V[1]
+	b = V[2] - V[1]
+	c = V[2] - V[0]
+	sides = [a,b,c]
+	dist = 0
+	max_perp =0 
+	for i in range(len(sides)):
+		for j in range(len(sides)):
+			if i == j:
+				continue
+			v1 =sides[i]
+			v2 = sides[j]
+			dist = get_perp_dist(v1,v2)
+                        print v1, v2, dist
+                        if dist > max_perp:
+                                max_perp = dist
+                                if v2[0] > v1[0]:
+                                        direction = 'right'
+                                else:
+                                        direction = 'left'
+	return direction
+			
+def _get_direction(img):
+	_,V = process_image(img)
+	max_perp = 0
+	for i in range(len(V)):
+		for j in range(len(V)):
+			v1 = V[i].flatten()
+			v2 =V[j].flatten()
+			if i == j:
+				continue
+			dist = get_perp_dist(v1,v2)
+			print v1, v2, dist
+			if dist > max_perp:
+				max_perp = dist
+				if v2[0] > v1[0]:
+					direction = 'right'
+				else:
+					direction = 'left'
+	return direction
+
+def process_image(image):
 	# cv2.imshow('', image)
 	# cv2.waitKey(0)
 	cv2.imwrite('img.png',image)
@@ -67,13 +117,14 @@ def get_color(image):
 	# loop over the contours
 	my_shape = None
 	max_area = -1
+	my_V = None
 	for c in cnts:
 		# compute the center of the contour, then detect the name of the
 		# shape using only the contour
 		M = cv2.moments(c)
 		cX = int((M["m10"] / (M["m00"] + 1e-6)) * ratio)
 		cY = int((M["m01"] / (M["m00"] + 1e-6)) * ratio)
-		shape = sd.detect(c)
+		shape, V = sd.detect(c)
 		# multiply the contour (x, y)-coordinates by the resize ratio,
 		# then draw the contours and the name of the shape on the image
 		c = c.astype("float")
@@ -94,15 +145,18 @@ def get_color(image):
 				
 				my_shape = c
 				max_area = area
+				my_V = V
 			# show the output image
 #				cv2.imshow("Image", resized)
 #				cv2.waitKey(0)
 #				print shape,area
+	return my_shape, my_V
+def get_color(resized, my_V, my_shape):
 	mask = np.zeros_like(resized)
-#	print my_shape
-	# cv2.drawContours(mask,[my_shape],-1,color=255,thickness=-1)
+	print my_V.shape
+	cv2.drawContours(mask,[my_shape],-1,color=255,thickness=-1)
 	cv2.fillPoly(mask,pts=np.int32([my_shape]),color=(255,255,255))
-#	cv2.imshow('', mask)
+	cv2.imwrite('img-mask.png', mask)
 #	cv2.waitKey(0)
 	points = np.where(mask == 255)
 #	print points[2]
@@ -114,7 +168,7 @@ def get_color(image):
 	color = np.mean(pixels,axis=0)
 #	print color
 	return colors[np.argmax(color)]
-
+#img = get_image_from_picam()
 #img = get_image(0)
-#img = cv2.imread("green.jpg")
-#print get_color(img)
+#img = cv2.imread("img.jpg")
+#print get_direction(img)
