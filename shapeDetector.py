@@ -41,6 +41,27 @@ def get_perp_dist(v1,v2):
 
 def get_direction(img):
 	_,V = process_image(img)
+        if len(V) != 3:
+                return None
+        V = map(lambda x: x.flatten(), V)
+	print V
+	dist = 2**16	
+	for i in range(3):
+		for j in range(i,3):
+			d = np.abs(V[i][1] - V[j][1])
+			if d < dist:
+				dist = d
+				closest_pair = [i,j]
+	print map(lambda x: V[x], closest_pair)
+	tip = filter(lambda x: x not in closest_pair, range(len(V)))[0]
+	tip = V[tip]
+	if tip[1] < V[closest_pair[0]][0]:
+		return 'left'
+	else:
+		return 'right'
+	
+def _get_direction(img):
+	_,V = process_image(img)
 	if len(V) != 3:
 		return None
 	V = map(lambda x: x.flatten(), V)

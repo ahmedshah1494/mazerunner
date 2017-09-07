@@ -1,11 +1,9 @@
 import cv2
 print cv2.__version__
 from picamera.array import PiRGBArray
-from picamera import PiCamera
 import time
 
-def get_image_from_picam():
-	camera = PiCamera()
+def get_image_from_picam(camera):
 	rawCapture = PiRGBArray(camera)
  
 	# allow the camera to warmup
@@ -14,7 +12,7 @@ def get_image_from_picam():
 	# grab an image from the camera
 	camera.capture(rawCapture, format="bgr")
 	image = rawCapture.array
-	image = cv2.flip( image, 0 )
+#	image = cv2.flip( image, 0 )
 	return image
 def get_image(dev_id):
 

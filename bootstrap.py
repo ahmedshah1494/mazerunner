@@ -3,9 +3,10 @@ import time
 import os
 import photo
 import shapeDetector
+from picamera import PiCamera
 
 robot = None
-
+camera = PiCamera()
 def moveForward(speed=200):
 	return robot.moveForward(speed)
 
@@ -34,7 +35,7 @@ def stop():
 	return robot.stop()
 
 def getDirectionFromImage():
-	img = photo.get_image_from_picam()
+	img = photo.get_image_from_picam(camera)
 	c = shapeDetector.get_direction(img)
 	robot.robot.digit_led_ascii(c[:4].zfill(4))
 	return c
