@@ -4,7 +4,7 @@ import os
 import photo
 import shapeDetector
 from picamera import PiCamera
-
+from text import image2text
 robot = None
 camera = PiCamera()
 def moveForward(speed=200):
@@ -40,6 +40,35 @@ def getDirectionFromImage():
 	robot.robot.digit_led_ascii(c[:4].zfill(4))
 	return c
 
+def getCommandFromImage():
+	valid_commands = [['spin', 'turn', 'move'],
+				['right', 'left', 'forward', 'backward'],
+				[],
+				['times', 'degrees', 'meters']
+				]
+	img = photo.get_image_from_picam(camera)
+	text = image2text(img)
+	split = text.split()
+
+	if len(split) < 4:
+		print ("<span class='error'>Image is not clear, text recognition failed</span>")
+		return
+
+	cmd = []
+	count = 0
+	for i in range(len(split)):
+		if count == 2:
+			try:
+				cmd.append(float(split[i]))
+				count += 1
+			except:
+				continue
+		elif split[i] in valid_commands[count]:
+			cmd.append(split[i])
+			count += 1
+	if len(cmd) < 4:
+		print("<span class='error'>Invalid command: %s </span>" % reduce(lambda x,y: x+' '+y,cmd))
+	return cmd
 # try:
 robot = Robot()
 if not robot.isConnected():
