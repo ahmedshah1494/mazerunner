@@ -42,8 +42,14 @@ RUN git clone --depth 1  https://github.com/tesseract-ocr/tesseract.git /usr/loc
 	make install && \
 	ldconfig
 
+RUN apt-get purge -y g++ && \
+	apt-get purge -y autoconf automake libtool && \
+	apt-get purge -y autoconf-archive && \
+	apt-get purge -y pkg-config && \
+
 RUN wget https://github.com/tesseract-ocr/tessdata/raw/4.00/eng.traineddata && \	
-	mv eng.traineddata /usr/local/share/tessdata 
+	mv eng.traineddata /usr/local/share/tessdata && \
+	rm -rf /usr/local/src/tesseract-ocr
 
 RUN git clone https://github.com/itseez/opencv.git /usr/local/src/opencv 
 
