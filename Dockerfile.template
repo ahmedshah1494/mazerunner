@@ -45,7 +45,7 @@ RUN git clone --depth 1  https://github.com/tesseract-ocr/tesseract.git /usr/loc
 RUN apt-get purge -y g++ && \
 	apt-get purge -y autoconf automake libtool && \
 	apt-get purge -y autoconf-archive && \
-	apt-get purge -y pkg-config && \
+	apt-get purge -y pkg-config
 
 RUN wget https://github.com/tesseract-ocr/tessdata/raw/4.00/eng.traineddata && \	
 	mv eng.traineddata /usr/local/share/tessdata && \
