@@ -5,6 +5,7 @@ import photo
 import shapeDetector
 from picamera import PiCamera
 from text import image2text
+
 robot = None
 camera = PiCamera()
 def moveForward(speed=200):
@@ -49,14 +50,16 @@ def getCommandFromImage():
 	img = photo.get_image_from_picam(camera)
 	text = image2text(img)
 	split = text.split()
-
+	split = map(lambda x: x.lower(), split)
+	print split
 	if len(split) < 4:
 		print ("<span class='error'>Image is not clear, text recognition failed</span>")
 		return
-
 	cmd = []
 	count = 0
 	for i in range(len(split)):
+		if count >= len(valid_commands):
+			break
 		if count == 2:
 			try:
 				cmd.append(float(split[i]))
@@ -67,7 +70,7 @@ def getCommandFromImage():
 			cmd.append(split[i])
 			count += 1
 	if len(cmd) < 4:
-		print("<span class='error'>Invalid command: %s </span>" % reduce(lambda x,y: x+' '+y,cmd))
+		print("<span class='error'>Invalid command: %s </span>" % str(cmd))
 	return cmd
 # try:
 robot = Robot()

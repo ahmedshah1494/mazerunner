@@ -14,9 +14,10 @@ def image2text(image):
 	text = pytesseract.image_to_string(img)
 	return text
 
-if __name__=='__main__'
+if __name__=='__main__':
 	import photo
 	from picamera import PiCamera
 	camera = PiCamera()
 	img = photo.get_image_from_picam(camera)
-	print(image2text(im))
+	cv2.imwrite('text_cam.png', img)
+	print(image2text(img))
