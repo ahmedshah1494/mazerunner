@@ -48,6 +48,10 @@ def runcode(code):
 @csrf_exempt
 def run_code(r):
     settings.GLOBAL_LOCK.acquire()
+    dirPath = "/root/server/irobot/static/snapshots"
+    fileList = os.listdir(dirPath)
+    for fileName in fileList:
+        os.remove(dirPath+"/"+fileName)
     code = r.POST["code"]
     try:
         pid_code = subprocess.check_output("ps aux | grep 'identify.py'", shell=True)

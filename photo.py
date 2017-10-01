@@ -7,13 +7,16 @@ def get_image_from_picam(camera):
 	rawCapture = PiRGBArray(camera)
  
 	# allow the camera to warmup
-	time.sleep(0.1)
+	time.sleep(0.3)
  
 	# grab an image from the camera
 	camera.capture(rawCapture, format="bgr")
 	image = rawCapture.array
-#	image = cv2.flip( image, 0 )
-	return image
+	ts = time.time()
+	camera.resolution = (1920, 1200)
+	camera.capture('/root/server/irobot/static/snapshots/snapshot' + str(ts) + '.jpg')
+	return ts, image
+	
 def get_image(dev_id):
 
 	cap = cv2.VideoCapture(dev_id)
