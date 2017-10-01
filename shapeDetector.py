@@ -35,16 +35,20 @@ class ShapeDetector:
  
 		# return the name of the shape
 		return shape,approx
+		
 def get_perp_dist(v1,v2):
 	c = v2 - v1
 	return np.linalg.norm(c)**2 - (v1 / np.linalg.norm(v1)).dot(c)**2
 
 def get_direction(img):
 	_,V = process_image(img)
-        if len(V) != 3:
+
+	if V == None:
+		return None
+	if  len(V) != 3:
                 return None
         V = map(lambda x: x.flatten(), V)
-	print V
+	# print V
 	dist = 2**16	
 	for i in range(3):
 		for j in range(i,3):
@@ -52,7 +56,7 @@ def get_direction(img):
 			if d < dist:
 				dist = d
 				closest_pair = [i,j]
-	print map(lambda x: V[x], closest_pair)
+	# print map(lambda x: V[x], closest_pair)
 	tip = filter(lambda x: x not in closest_pair, range(len(V)))[0]
 	tip = V[tip]
 	if tip[1] < V[closest_pair[0]][0]:
@@ -98,7 +102,7 @@ def _get_direction(img):
 			if i == j:
 				continue
 			dist = get_perp_dist(v1,v2)
-			print v1, v2, dist
+			# print v1, v2, dist
 			if dist > max_perp:
 				max_perp = dist
 				if v2[0] > v1[0]:
@@ -110,7 +114,7 @@ def _get_direction(img):
 def process_image(image):
 	# cv2.imshow('', image)
 	# cv2.waitKey(0)
-	cv2.imwrite('img.png',image)
+	cv2.imwrite('/root/server/irobot/static/img.png',image)
 	colors = ['blue','green', 'red']
 	# load the image and resize it to a smaller factor so that
 	# the shapes can be approximated better
@@ -129,7 +133,7 @@ def process_image(image):
 #	cv2.imshow('Thresh', thresh) 
 	# find contours in the thresholded image and initialize the
 	# shape detector
-	cv2.imwrite('img-thresh.png',thresh)
+	cv2.imwrite('/root/server/irobot/static/img-thresh.png',thresh)
 	cnts = cv2.findContours(thresh.copy(), cv2.RETR_LIST,
 		cv2.CHAIN_APPROX_SIMPLE)
 	cnts = cnts[0] if imutils.is_cv2() else cnts[1]
@@ -171,6 +175,7 @@ def process_image(image):
 #				cv2.imshow("Image", resized)
 #				cv2.waitKey(0)
 #				print shape,area
+
 	return my_shape, my_V
 def get_color(resized, my_V, my_shape):
 	mask = np.zeros_like(resized)
