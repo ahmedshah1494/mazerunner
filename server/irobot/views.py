@@ -47,6 +47,10 @@ def runcode(code):
 
 @csrf_exempt
 def run_code(r):
+    if settings.IS_RUNNING == 1:
+        result = "<span class='error'> iRobot Busy </span>"
+        return HttpResponse(result)
+    settings.IS_RUNNING = 1
     settings.GLOBAL_LOCK.acquire()
     dirPath = "/root/server/irobot/static/snapshots"
     fileList = os.listdir(dirPath)
@@ -69,14 +73,14 @@ def run_code(r):
         subprocess.check_output("kill " + str(pid), shell=True)
     except:
         pass
-        
-    finally:
-        settings.GLOBAL_LOCK.release()
     
     try:
         result = runcode(code)
     except:
         result = "<span class='error'> Interrupted</span>"
+    finally:
+        settings.IS_RUNNING = 0
+        settings.GLOBAL_LOCK.release()
     print (result)
     return HttpResponse(result)
 

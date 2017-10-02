@@ -15,6 +15,7 @@ from threading import BoundedSemaphore
 
 GLOBAL_LOCK = BoundedSemaphore(value=1)
 PROGRAM_STATE = None
+IS_RUNNING = 0
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

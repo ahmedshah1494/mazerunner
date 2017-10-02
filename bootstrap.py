@@ -157,6 +157,7 @@ def getCommandFromImage(c):
 				[],
 				['times', 'degrees', 'meters']
 				]
+
 				
 	if c == None:
 		return
@@ -170,10 +171,13 @@ def getCommandFromImage(c):
 	split = map(lambda x: x.lower(), split)
 	print split
 	
+
 	if len(split) < 4:
 		print ("<span class='error'>Image is not clear, text recognition failed </span>")
 		return
+
 	print ("<span>Command requested</span>")
+
 	cmd = []
 	count = 0
 	for i in range(len(split)):

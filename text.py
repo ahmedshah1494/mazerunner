@@ -1,13 +1,19 @@
 import cv2
 import pytesseract
 from PIL import Image
+<<<<<<< HEAD
+
+def image2text(image):
+=======
 import numpy as np
 
 def image2text(image, isTag):
+>>>>>>> f8bcbbb0a3f26b2ebb18df63d576ec884971cc43
 	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 	gray =  cv2.bitwise_not(gray)
 	gray = cv2.threshold(gray, 200, 255,
 			cv2.THRESH_BINARY)[1]
+
 	gray = cv2.medianBlur(gray,3)
 	filename = "/root/server/irobot/static/snapshots/temp.png"
 	cv2.imwrite(filename, gray)
@@ -86,8 +92,6 @@ def correct_skew(filename):
 
 	return rotated
 
-	
-	
 if __name__=='__main__':
 	import photo
 	from picamera import PiCamera
