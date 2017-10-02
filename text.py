@@ -1,14 +1,10 @@
 import cv2
 import pytesseract
 from PIL import Image
-<<<<<<< HEAD
 
-def image2text(image):
-=======
 import numpy as np
 
 def image2text(image, isTag):
->>>>>>> f8bcbbb0a3f26b2ebb18df63d576ec884971cc43
 	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 	gray =  cv2.bitwise_not(gray)
 	gray = cv2.threshold(gray, 200, 255,
@@ -31,11 +27,11 @@ def image2text(image, isTag):
 		return pytesseract.image_to_string(img)
 	else:
 		text = pytesseract.image_to_string(img, config='-psm 9 -c tessedit_char_whitelist=[]AX0OZ')
-		print ("Text1:  " + text)
+		#print ("Text1:  " + text)
 		if len(text) == 0:
 			text = pytesseract.image_to_string(img, config='-c tessedit_char_whitelist=[]AX0OZ')
-			print ("Text2 " + text)
-		print ("Text2 " + pytesseract.image_to_string(img, config='-c tessedit_char_whitelist=[]AX0OZ'))
+			#print ("Text2 " + text)
+		#print ("Text2 " + pytesseract.image_to_string(img, config='-c tessedit_char_whitelist=[]AX0OZ'))
 		return text
 
 		
