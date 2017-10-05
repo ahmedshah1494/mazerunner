@@ -47,6 +47,9 @@ def runcode(code):
 
 @csrf_exempt
 def run_code(r):
+    settings.SNAPSHOT_FOLDER = "/root/server/irobot/static/snapshots"
+    if not os.path.exists(settings.SNAPSHOT_FOLDER):
+        os.makedirs(settings.SNAPSHOT_FOLDER)
     if settings.IS_RUNNING == 1:
         result = "<span class='error'> iRobot Busy </span>"
         return HttpResponse(result)
@@ -56,6 +59,12 @@ def run_code(r):
     fileList = os.listdir(dirPath)
     for fileName in fileList:
         os.remove(dirPath+"/"+fileName)
+   # dir_pngs = os.listdir("/root/server/irobot/static")
+   # from os.path import join
+   #import sys
+ #   for item in dir_pngs:
+#        if item.endswith(".png"):
+  #          os.remove(join(dir, item))
     code = r.POST["code"]
     try:
         pid_code = subprocess.check_output("ps aux | grep 'identify.py'", shell=True)

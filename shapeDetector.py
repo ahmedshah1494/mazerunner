@@ -133,7 +133,11 @@ def process_image(image):
 #	cv2.imshow('Thresh', thresh) 
 	# find contours in the thresholded image and initialize the
 	# shape detector
-	cv2.imwrite('/root/server/irobot/static/img-thresh.png',thresh)
+	import os
+#	os.remove('/root/server/irobot/static/img-thresh2.png')
+	cv2.imwrite('/root/server/irobot/static/img-thresh2.png',thresh)
+#	os.remove('/root/server/irobot/static/img-inv.png')
+        cv2.imwrite('/root/server/irobot/static/img-inv2.png',inv)
 	cnts = cv2.findContours(thresh.copy(), cv2.RETR_LIST,
 		cv2.CHAIN_APPROX_SIMPLE)
 	cnts = cnts[0] if imutils.is_cv2() else cnts[1]

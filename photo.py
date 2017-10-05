@@ -13,7 +13,8 @@ def get_image_from_picam(camera):
 	camera.capture(rawCapture, format="bgr")
 	image = rawCapture.array
 	ts = time.time()
-	camera.resolution = (1920, 1200)
+	# camera.resolution = (1920, 1200)
+	camera.resolution = (1020, 610)
 	camera.capture('/root/server/irobot/static/snapshots/snapshot' + str(ts) + '.jpg')
 	return ts, image
 	

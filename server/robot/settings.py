@@ -124,3 +124,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+SNAPSHOT_FOLDER = "/root/server/irobot/static/snapshots"
+if not os.path.exists(SNAPSHOT_FOLDER):
+    os.makedirs(SNAPSHOT_FOLDER)

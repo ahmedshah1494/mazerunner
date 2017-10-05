@@ -1,0 +1,73 @@
+#Set the base os
+FROM resin/raspberrypi3-python
+FROM resin/raspberrypi2-python:latest
+
+# File Author / Maintainer
+MAINTAINER mshah1@qatar.cmu.edu
+
+# Defines our working directory in container
+WORKDIR /root
+
+# This will copy all files in our root to the working  directory in the container
+COPY . ./
+
+CMD modprobe bcm2835-v4l2
+# Install python dependencies from requirements.txt
+RUN pip install -r requirements.txt
+
+#RUN apt-get update && apt-get install -y vim 
+RUN apt-get update && \
+	apt-get install -y cmake python-numpy && \
+	apt-get install g++ && \
+	apt-get install autoconf automake libtool && \
+	apt-get install autoconf-archive && \
+	apt-get install pkg-config && \
+	apt-get install libpng12-dev && \
+	apt-get install libjpeg8-dev && \
+	apt-get install libtiff5-dev && \
+	apt-get install zlib1g-dev
+
+RUN git clone https://github.com/DanBloomberg/leptonica.git /usr/local/src/leptonica && \
+	cd /usr/local/src/leptonica && \
+	./autobuild && \
+	./configure && \
+	make && \
+	make install
+
+RUN git clone -b 3.05 --depth 1  https://github.com/tesseract-ocr/tesseract.git /usr/local/src/tesseract-ocr && \
+	cd /usr/local/src/tesseract-ocr && \
+	./autogen.sh && \
+	./configure && \
+	make && \
+	make install && \
+	ldconfig
+
+RUN wget https://github.com/tesseract-ocr/tessdata/raw/4.00/eng.traineddata && \	
+	mv eng.traineddata /usr/local/share/tessdata && \
+	rm -rf /usr/local/src/tesseract-ocr
+
+RUN git clone https://github.com/itseez/opencv.git /usr/local/src/opencv 
+
+RUN cd /usr/local/src/opencv && \
+mkdir release && cd release && \
+cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local ..
+
+RUN cd /usr/local/src/opencv/release && \
+make -j4 && make install && ldconfig
+
+RUN rm -rf /usr/local/src/opencv \
+	&& apt-get purge -y cmake \
+	&& apt-get autoremove -y --purge
+
+RUN apt-get purge -y autoconf automake libtool && \
+	apt-get purge -y autoconf-archive && \
+	apt-get purge -y pkg-config
+	
+ENV LD_LIBRARY_PATH /usr/local/lib
+
+# switch on systemd init system in container
+ENV INITSYSTEM on
+
+# run Django webserver
+#CMD python ./robot/manage.py runserver $THEIP:5678 
+CMD ./startServer
