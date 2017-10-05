@@ -12,8 +12,8 @@ import re
 import numpy as np
 from pyimagesearch.transform import four_point_transform
 
-# hack = True
-hack = False
+hack = True
+# hack = False
 
 def sim(a, b):
     return SequenceMatcher(None, a, b).ratio()
